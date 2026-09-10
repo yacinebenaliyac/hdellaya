@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: hdellaya
+    runtime: docker
+    plan: free
+    region: frankfurt
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: DB_HOST
+        sync: false
+      - key: DB_NAME
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASS
+        sync: false
+      - key: PORT
+        value: 10000
+    healthCheckPath: /
+    autoDeploy: true

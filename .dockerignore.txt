@@ -1,0 +1,9 @@
+.git
+.gitignore
+*.md
+.env
+uploads/*
+!uploads/.gitkeep
+*.crdownload
+.DS_Store
+Thumbs.db
