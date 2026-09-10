@@ -39,7 +39,7 @@ foreach ($pdo->query('SELECT `key`, `value` FROM settings')->fetchAll() as $r) {
 }
 
 /* ---------- Liens réseaux sociaux (avec valeurs par défaut) ---------- */
-$instagram = $settings['instagram'] ?? 'https://www.instagram.com/h__dellaya';
+$instagram = $settings['instagram'] ?? 'https://www.instagram.com/h__dellaya?stkn=MzEyM3VhcGozZjZh';
 $facebook  = $settings['facebook']  ?? 'https://www.facebook.com/share/19JiDJc1mT/';
 $tiktok    = $settings['tiktok']    ?? 'https://www.tiktok.com/@h_dellaya';
 
