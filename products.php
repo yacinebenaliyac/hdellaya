@@ -19,15 +19,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!empty($_FILES['image']['name']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
             $ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
             if (in_array($ext, ['jpg','jpeg','png','webp','gif'], true) && $_FILES['image']['size'] <= 4*1024*1024) {
-                $fname = 'p_' . bin2hex(random_bytes(8)) . '.' . $ext;
-                if (move_uploaded_file($_FILES['image']['tmp_name'], UPLOAD_DIR . '/' . $fname)) {
-                    if ($img && file_exists(ROOT_DIR . '/' . $img) && strpos($img, 'uploads/') === 0) @unlink(ROOT_DIR . '/' . $img);
-                    $img = UPLOAD_URL . '/' . $fname;
+                require_once __DIR__ . '/cloudinary.php';
+                $result = cloudinary_upload($_FILES['image']['tmp_name'], 'hdellaya');
+                if ($result['ok']) {
+                    $img = $result['url'];
+                } else {
+                    flash('ok', '⚠ Erreur upload : ' . $result['error']);
                 }
             }
         }
         if (!empty($_POST['remove_image'])) {
-            if ($img && file_exists(ROOT_DIR . '/' . $img) && strpos($img, 'uploads/') === 0) @unlink(ROOT_DIR . '/' . $img);
             $img = '';
         }
 
@@ -45,10 +46,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($action === 'delete') {
         $id = (int)$_POST['id'];
-        $stmt = $pdo->prepare('SELECT image FROM products WHERE id=?');
-        $stmt->execute([$id]);
-        $img = $stmt->fetchColumn();
-        if ($img && file_exists(ROOT_DIR . '/' . $img) && strpos($img, 'uploads/') === 0) @unlink(ROOT_DIR . '/' . $img);
         $pdo->prepare('DELETE FROM products WHERE id=?')->execute([$id]);
         flash('ok', 'Produit supprimé.');
         redirect(url('products.php'));
@@ -138,9 +135,9 @@ include __DIR__ . '/header.php';
           <small class="hint">JPG, PNG, WEBP ou GIF · max 4 Mo</small>
         </label>
 
-        <?php if (!empty($edit['image']) && file_exists(ROOT_DIR . '/' . $edit['image'])): ?>
+        <?php if (!empty($edit['image'])): ?>
           <div class="img-preview">
-            <img src="<?= url($edit['image']) ?>" alt="">
+            <img src="<?= e($edit['image']) ?>" alt="">
             <label class="inline"><input type="checkbox" name="remove_image" value="1"> Supprimer cette image</label>
           </div>
         <?php endif; ?>
@@ -162,8 +159,8 @@ include __DIR__ . '/header.php';
           <?php foreach ($products as $p): ?>
             <div class="prod-card <?= !empty($p['featured']) ? 'is-featured' : '' ?>">
               <div class="prod-thumb">
-                <?php if (!empty($p['image']) && file_exists(ROOT_DIR . '/' . $p['image'])): ?>
-                  <img src="<?= url($p['image']) ?>" alt="">
+                <?php if (!empty($p['image'])): ?>
+                  <img src="<?= e($p['image']) ?>" alt="">
                 <?php else: ?>
                   <div class="no-img">🌿 Pas de photo</div>
                 <?php endif; ?>
