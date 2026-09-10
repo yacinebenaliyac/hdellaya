@@ -132,11 +132,11 @@ include __DIR__ . '/header.php';
                  data-name="<?= e($p['name']) ?>"
                  data-price="<?= (float)$p['price'] ?>"
                  data-desc="<?= e($p['description']) ?>"
-                 data-img="<?= !empty($p['image']) && file_exists(ROOT_DIR . '/' . $p['image']) ? url($p['image']) : '' ?>"
+                 data-img="<?= e($p['image'] ?? '') ?>"
                  data-catname="<?= e($p['cat_name'] ?? '') ?>">
           <div class="card-media">
-            <?php if (!empty($p['image']) && file_exists(ROOT_DIR . '/' . $p['image'])): ?>
-              <img src="<?= url($p['image']) ?>" alt="<?= e($p['name']) ?>" loading="lazy">
+            <?php if (!empty($p['image'])): ?>
+              <img src="<?= e($p['image']) ?>" alt="<?= e($p['name']) ?>" loading="lazy">
             <?php else: ?>
               <div class="card-placeholder">
                 <svg viewBox="0 0 24 24" fill="none"><path d="M12 2c1 4-3 5-3 9a3 3 0 006 0c0-2-1-3-1-5 2 1 3 4 3 6a5 5 0 01-10 0c0-5 3-6 5-10z" fill="#C75F92"/></svg>
