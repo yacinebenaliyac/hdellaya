@@ -37,6 +37,12 @@ $settings = [];
 foreach ($pdo->query('SELECT `key`, `value` FROM settings')->fetchAll() as $r) {
     $settings[$r['key']] = $r['value'];
 }
+
+/* ---------- Liens réseaux sociaux (avec valeurs par défaut) ---------- */
+$instagram = $settings['instagram'] ?? 'https://www.instagram.com/h__dellaya';
+$facebook  = $settings['facebook']  ?? 'https://www.facebook.com/share/19JiDJc1mT/';
+$tiktok    = $settings['tiktok']    ?? 'https://www.tiktok.com/@h_dellaya';
+
 $categories = $pdo->query('SELECT * FROM categories ORDER BY position, id')->fetchAll();
 $products   = $pdo->query(
     'SELECT p.*, c.name AS cat_name, c.slug AS cat_slug, c.emoji AS cat_emoji
@@ -63,7 +69,7 @@ include __DIR__ . '/header.php';
       <p class="lead"><?= e($settings['hero_lead']) ?></p>
       <div class="hero-ctas">
         <a href="#catalogue" class="btn btn-primary">Voir les créations →</a>
-        <a href="<?= e($settings['instagram']) ?>" target="_blank" rel="noopener" class="btn btn-ghost">
+        <a href="<?= e($instagram) ?>" target="_blank" rel="noopener" class="btn btn-ghost">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
           Instagram
         </a>
@@ -168,59 +174,39 @@ include __DIR__ . '/header.php';
   </div>
 </section>
 
-<!-- INSTAGRAM -->
+<!-- RÉSEAUX SOCIAUX -->
 <section id="instagram" class="section section-alt">
   <div class="container">
     <div class="section-head" data-reveal>
       <div>
-        <span class="section-tag">Instagram</span>
-        <h2>Sur notre <em>fil</em></h2>
+        <span class="section-tag">Réseaux sociaux</span>
+        <h2>Suivez-nous sur nos <em>réseaux</em></h2>
       </div>
       <p>Nos dernières créations, coulisses de l'atelier et retours de clientes.</p>
     </div>
     <div class="ig-stats" data-reveal>
-      <div class="stat"><b><?= e($settings['ig_posts']) ?></b><span>publications</span></div>
-      <div class="stat"><b><?= e($settings['ig_followers']) ?></b><span>abonnés</span></div>
-      <div class="stat"><b><?= e($settings['ig_following']) ?></b><span>suivi(e)s</span></div>
+      <div class="stat"><b><?= e($settings['ig_posts'] ?? '44') ?></b><span>publications</span></div>
+      <div class="stat"><b><?= e($settings['ig_followers'] ?? '940') ?></b><span>abonnés</span></div>
+      <div class="stat"><b><?= e($settings['ig_following'] ?? '2 246') ?></b><span>suivi(e)s</span></div>
     </div>
     <div class="ig-grid" data-reveal>
-      <div class="ig-tile"><span>🕯️</span><p>Shmou3 el 3arous</p></div>
-      <div class="ig-tile"><span>🌸</span><p>Faveurs de mariage</p></div>
-      <div class="ig-tile"><span>✨</span><p>Coulisses atelier</p></div>
-      <div class="ig-tile"><span>💌</span><p>Vos retours</p></div>
+      <a class="ig-tile" href="<?= e($instagram) ?>" target="_blank" rel="noopener">
+        <span>📷</span><p>Instagram</p>
+      </a>
+      <a class="ig-tile" href="<?= e($facebook) ?>" target="_blank" rel="noopener">
+        <span>👍</span><p>Facebook</p>
+      </a>
+      <a class="ig-tile" href="<?= e($tiktok) ?>" target="_blank" rel="noopener">
+        <span>🎵</span><p>TikTok</p>
+      </a>
+      <div class="ig-tile">
+        <span>💌</span><p>Vos retours</p>
+      </div>
     </div>
-    <div class="ig-cta" data-reveal>
-      <a href="<?= e($settings['instagram']) ?>" target="_blank" rel="noopener" class="btn btn-primary">@h_dellaya →</a>
-    </div>
-  </div>
-</section>
-
-<!-- AVIS -->
-<section id="avis" class="section">
-  <div class="container">
-    <div class="section-head" data-reveal>
-      <div>
-        <span class="section-tag">Avis clients</span>
-        <h2>Elles nous font <em>confiance</em></h2>
-      </div>
-      <p>Ce que nos clientes disent après réception de leur commande.</p>
-    </div>
-    <div class="reviews-grid">
-      <div class="review" data-reveal>
-        <div class="stars">★★★★★</div>
-        <p>« Bougie de henné magnifique, exactement comme sur les photos. Livrée à temps pour la soirée. »</p>
-        <div class="who">— Amina · Tlemcen</div>
-      </div>
-      <div class="review" data-reveal>
-        <div class="stars">★★★★★</div>
-        <p>« Le bouquet en cire est superbe et tient très bien la forme. Très bon rapport qualité-prix. »</p>
-        <div class="who">— Yasmine · Maghnia</div>
-      </div>
-      <div class="review" data-reveal>
-        <div class="stars">★★★★★</div>
-        <p>« Contact rapide sur Instagram, elle a été à l'écoute de mes demandes de personnalisation. »</p>
-        <div class="who">— Nour · Oran</div>
-      </div>
+    <div class="ig-cta" data-reveal style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
+      <a href="<?= e($instagram) ?>" target="_blank" rel="noopener" class="btn btn-primary">@h__dellaya →</a>
+      <a href="<?= e($facebook) ?>" target="_blank" rel="noopener" class="btn btn-ghost">Facebook →</a>
+      <a href="<?= e($tiktok) ?>" target="_blank" rel="noopener" class="btn btn-ghost">TikTok →</a>
     </div>
   </div>
 </section>
